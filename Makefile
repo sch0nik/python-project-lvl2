@@ -5,7 +5,7 @@ lint:
 	poetry run flake8 gendiff
 
 runh:
-	poetry run python3 -m gendiff.scripts.gendiff --help
+	poetry run gen-diff --help
 
 build:
 	poetry build
@@ -17,7 +17,7 @@ package-install:
 	python3 -m pip install --user dist/*.whl
 
 runf:
-	poetry run python3 -m gendiff.scripts.gendiff file1.json file2.json
+	poetry run gen-diff file1.json file2.json
 
 start: build publish package-install
 

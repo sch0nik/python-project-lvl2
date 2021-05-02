@@ -1,35 +1,44 @@
-"""Функции для работы с JSON - файлами."""
-import json
+"""Функции для сравнения двух словарей."""
 
 
-def generate_diff(file_path_one, file_path_two):
-    """Находит различия между двумя файлами.
+def generate_diff(data1, data2):
+    """Находит различия между двумя словарями.
 
     Args:
-        file_path_one: первый файл и путь к нему.
-        file_path_two: второй файл и путь к нему.
+        data1: первый словарь.
+        data2: второй словарь.
 
     Returns:
-        Возвращает различия между входными файлами.
+        Возвращает строку с различием между этими словарями.
+        Строка отсортирована.
     """
-    file1 = json.load(open(file_path_one))  # noqa: WPS515
-    file2 = json.load(open(file_path_two))  # noqa: WPS515
+    key_data1 = list(data1.keys())
+    key_data1 = sorted(key_data1)
 
-    list_file1 = list(file1.keys())
-    list_file2 = list(file2.keys())
+    key_data2 = list(data2.keys())
+    key_data2 = sorted(key_data2)
 
-    result = ''
-    for item_list1 in list_file1:
-        if item_list1 in list_file2:
-            list_file2.remove(item_list1)
-            if file1.get(item_list1) != file2.get(item_list1):
-                result += f'- {item_list1}: {file1.get(item_list1)}\n'
-                result += f'+ {item_list1}: {file2.get(item_list1)}\n'
-            else:
-                result += f'  {item_list1}: {file1.get(item_list1)}\n'
+    diff = ''
+    for item_key1 in key_data1:
+
+        value_data1 = data1.get(item_key1)
+        value_data2 = data2.get(item_key1)
+
+        if value_data2 is None:
+            tmp_string = f'- {item_key1}: {value_data1}'
+        elif value_data1 == value_data2:
+            key_data2.remove(item_key1)
+            tmp_string = f'  {item_key1}: {value_data1}'
         else:
-            result += f'- {item_list1}: {file1.get(item_list1)}\n'
-    for item_list2 in list_file2:
-        result += f'+ {item_list2}: {file2.get(item_list2)}\n'
+            key_data2.remove(item_key1)
+            tmp_string = (
+                f'- {item_key1}: {value_data1}\n'
+                f'+ {item_key1}: {value_data2}'
+            )
 
-    return result
+        diff += tmp_string + '\n'
+
+    for item_key2 in key_data2:
+        diff += f'+ {item_key2}: {data2.get(item_key2)}\n'
+
+    return f'{{\n{diff}}}'
