@@ -19,6 +19,9 @@ package-install:
 runf:
 	poetry run gen-diff file1.json file2.json
 
+test:
+	poetry run pytest gendiff tests
+
 start: build publish package-install
 
 .PHONY: install lint runh build publsh package-install start runf
