@@ -1,0 +1,17 @@
+{
+- active: True
++ active: False
+- age: 1000000
+  firstName: Tom
+- formed: 2016
++ formed: 2394
+- homeTown: Metro City
+  lastName: Jackson
+- name: Eternal Flame
++ name: John
+  secretBase: Super tower
+  secretIdentity: Unknown
+- squadName: Super hero squad
++ squadName: hero squad
++ phone: +79201234567
+}

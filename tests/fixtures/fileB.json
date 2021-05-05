@@ -1,0 +1,11 @@
+{
+  "firstName":"Tom",
+  "lastName":"Jackson",
+  "squadName": "hero squad",
+  "formed": 2394,
+  "secretBase": "Super tower",
+  "active": false,
+  "phone": "+79201234567",
+  "name": "John",
+  "secretIdentity": "Unknown"
+}
