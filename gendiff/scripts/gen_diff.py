@@ -5,18 +5,34 @@
 Программа определяющая разницу между двумя структурами данных.
 """
 
-import json
+import argparse
 
-from gendiff.difference import generate_diff
-from gendiff.parsing import create_pars
+from gendiff.generate_difference import generate_diff
 
+
+def create_pars():
+    """Создание парсера параметров."""
+    parser = argparse.ArgumentParser(description='Generate diff')
+    parser.add_argument(
+        'first_file',
+        type=open,
+    )
+    parser.add_argument(
+        'second_file',
+        type=open,
+    )
+    parser.add_argument(
+        '-f',
+        '--format',
+        default='FORMAT',
+        help='set format of output',
+    )
+
+    return parser
 
 def main():
     pars = create_pars().parse_args()
-    file1 = json.load(open(pars.first_file.name))
-    file2 = json.load(open(pars.second_file.name))
-
-    print(generate_diff(file1, file2))
+    print(generate_diff(pars.first_file.name, pars.second_file.name))
 
 
 if __name__ == '__main__':
