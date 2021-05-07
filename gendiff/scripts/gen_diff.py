@@ -30,6 +30,7 @@ def create_pars():
 
     return parser
 
+
 def main():
     pars = create_pars().parse_args()
     print(generate_diff(pars.first_file.name, pars.second_file.name))

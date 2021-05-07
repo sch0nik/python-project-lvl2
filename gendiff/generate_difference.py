@@ -11,6 +11,7 @@ def low_bool(value):
         return 'false'
     return value
 
+
 def compare_dict(data1, data2):
     """Находит различия между двумя словарями.
 
@@ -49,7 +50,7 @@ def compare_dict(data1, data2):
         # возможны три варианта
         # такого ключа нет во втором словаре
         if value_data2 is None:
-            tmp_string = f'  - {item_key1}: {low_bool(value_data1)}'  # временная строка
+            tmp_string = f'  - {item_key1}: {low_bool(value_data1)}'
         # значения в словарях по этому ключу равны
         elif value_data1 == value_data2:
             key_data2.remove(item_key1)
