@@ -24,7 +24,7 @@ def create_pars():
     parser.add_argument(
         '-f',
         '--format',
-        default='FORMAT',
+        default='stylish',
         help='set format of output',
     )
 
@@ -33,7 +33,11 @@ def create_pars():
 
 def main():
     pars = create_pars().parse_args()
-    print(generate_diff(pars.first_file.name, pars.second_file.name))
+    print(generate_diff(pars.first_file.name,
+                        pars.second_file.name,
+                        pars.format
+                        )
+          )
 
 
 if __name__ == '__main__':

@@ -17,10 +17,10 @@ package-install:
 	python3 -m pip install --user dist/*.whl
 
 runf:
-	poetry run gen-diff file1.json file2.json
+	poetry run gen-diff tests/fixtures/file1_recurs.json tests/fixtures/file2_recurs.json
 
 test:
-	poetry run pytest gendiff tests
+	poetry run pytest -vv gendiff tests
 
 start: build publish package-install
 
