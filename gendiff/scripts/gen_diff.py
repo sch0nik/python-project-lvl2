@@ -33,11 +33,12 @@ def create_pars():
 
 def main():
     pars = create_pars().parse_args()
-    print(generate_diff(pars.first_file.name,
-                        pars.second_file.name,
-                        pars.format
-                        )
-          )
+    print(generate_diff(
+        pars.first_file.name,
+        pars.second_file.name,
+        pars.format,
+    )
+    )
 
 
 if __name__ == '__main__':

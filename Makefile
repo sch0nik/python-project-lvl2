@@ -2,10 +2,8 @@ install:
 	poetry install
 
 lint:
-	poetry run flake8 gendiff
-
-runh:
-	poetry run gen-diff --help
+	poetry run flake8 gendiff formatter_diff
+	poetry run flake8 formatter_diff
 
 build:
 	poetry build
@@ -16,8 +14,8 @@ publish:
 package-install:
 	python3 -m pip install --user dist/*.whl
 
-runf:
-	poetry run gen-diff tests/fixtures/file1_recurs.json tests/fixtures/file2_recurs.json
+run:
+	poetry run gen-diff -f plain tests/fixtures/file1.json tests/fixtures/file2.json
 
 test:
 	poetry run pytest -vv gendiff tests

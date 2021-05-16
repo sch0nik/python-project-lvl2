@@ -1,14 +1,24 @@
 # Внутренее представление diff:
 # diff = [
 # {
-#     state: ['+', '-', ' '] - состояние, удалили, добавили и т.д.
+#     state: ['+', '-', ' ', '_' ] - состояние:
+#                                       +   добавили,
+#                                       -   удалили,
+#                                       _   именилось значение
+#                                       ' ' неизменился,
 #     key: key               - ключ из оригинального словаря
-#     children: [{}, None]   - либо вложенный словарь, либо None
-#     Value: [value, None]   - если children словарь, то None
+#     children: {}, None     - либо список словарей, либо None
+#     value: value, None     - если children список, то None
 #                              иначе value
+#     old_value: value        - только для случаев когда ключ остался,
+#                              а значение изменилось
 # }, ....
 # ]
-# from copy import deepcopy
+import copy
+STATE_ADD = '+'
+STATE_REMOVE = '-'
+STATE_UNMODIFIED = ' '
+STATE_UPDATE = '_'
 
 
 def create_diff():
@@ -16,34 +26,51 @@ def create_diff():
 
 
 def add_delete(key, data, diff):
+    new_data = copy.deepcopy(data)
     diff.append(
         {
-            'state': '-',
+            'state': STATE_REMOVE,
             'key': key,
-            'children': data if type(data) == dict else None,
-            'value': None if type(data) == dict else data,
+            'children': None,
+            'value': new_data,
         }
     )
 
 
 def add_unmodified(key, data, diff):
+    new_data = copy.deepcopy(data)
     diff.append(
         {
-            'state': ' ',
+            'state': STATE_UNMODIFIED,
             'key': key,
-            'children': data if type(data) == dict else None,
-            'value': None if type(data) == dict else data,
+            'children': None,
+            'value': new_data,
+        }
+    )
+
+
+def add_update(key, data1, data2, diff):
+    new_data1 = copy.deepcopy(data1)
+    new_data2 = copy.deepcopy(data2)
+    diff.append(
+        {
+            'state': STATE_UPDATE,
+            'key': key,
+            'old_value': new_data1,
+            'children': None,
+            'value': new_data2,
         }
     )
 
 
 def add_add(key, data, diff):
+    new_data = copy.deepcopy(data)
     diff.append(
         {
-            'state': '+',
+            'state': STATE_ADD,
             'key': key,
-            'children': data if type(data) == dict else None,
-            'value': None if type(data) == dict else data,
+            'children': None,
+            'value': new_data,
         }
     )
 
@@ -51,7 +78,7 @@ def add_add(key, data, diff):
 def add_diff(key, diff1, diff2):
     diff1.extend([
         {
-            'state': ' ',
+            'state': STATE_UNMODIFIED,
             'key': key,
             'children': diff2,
             'value': None,
@@ -59,38 +86,39 @@ def add_diff(key, diff1, diff2):
     ])
 
 
-def low_key_word(value):
-    if value is True or value is False:
-        return str(value).lower()
-    elif value is None:
-        return 'null'
-    return value
+def get_name(data):
+    return data['key']
 
 
-def stylish(data, tab=4):
-    space = ' '
-    result = ''
-    if type(data) == dict:
-        keys = sorted(list(data.keys()))
-        for item_dict in keys:
-            tmp = f'{tab * space}{item_dict}: '
-            if type(data[item_dict]) != dict:
-                result += (
-                    f'{tmp}'
-                    f'{low_key_word(data[item_dict])}\n'
-                )
-            else:
-                result += (
-                    f'{tmp}'
-                    f'{low_key_word(stylish(data[item_dict], tab + 4))}\n'
-                )
-    else:
-        new_data = sorted(data, key=lambda x: x['key'])
-        for item in new_data:
-            tmp = f'{item["state"].rjust(tab - 1, space)} {item["key"]}: '
-            if item['children'] is None:
-                result += f'{tmp}{low_key_word(item["value"])}\n'
-            else:
-                result += f"{tmp}{stylish(item['children'], tab + 4)}\n"
-    result = f'{{\n{result}{(tab - 4) * space}}}'
-    return result
+def get_state(data):
+    return data['state']
+
+
+def get_value(data):
+    return data['value']
+
+
+def get_children(data):
+    return data['children']
+
+
+def is_value(data):
+    if type(data) == list:
+        return False
+    return data.get('children') is None
+
+
+def is_node(data):
+    return not data.get('children') is None
+
+
+def is_complex(data):
+    return type(data) == dict
+
+
+def get_old_value(data):
+    return data.get('old_value')
+
+
+def sort_alphabetically(data):
+    return sorted(data, key=lambda x: x['key'])
