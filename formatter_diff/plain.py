@@ -17,13 +17,13 @@ def shaping(value):
     return f'\'{str(value)}\''
 
 
-def plain(data, parents=[]):
+def format_plain(data, parents=[]):
     result = ''
     data = diff.sort_alphabetically(data)
     for item in data:
         name = parents + [diff.get_name(item)]
         if diff.is_node(item):
-            result += plain(diff.get_children(item), name)
+            result += format_plain(diff.get_children(item), name)
         else:
             current_state = diff.get_state(item)
             name = SEPARATOR.join(name)

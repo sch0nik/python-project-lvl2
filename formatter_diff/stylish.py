@@ -13,13 +13,42 @@ def shaping(value, tab):
         keys = sorted(keys)
         result = ''
         for item in keys:
-            result += f'{" " * (tab  + BASE_TAB)}{item}: {shaping(value[item], tab + 4)}\n'
+            result += (
+                f'{" " * (tab  + BASE_TAB)}'
+                f'{item}: {shaping(value[item], tab + 4)}\n'
+            )
         result = f'{{\n{result}{" " * tab}}}'
         return result
     return str(value)
 
 
-def stylish(data, tab=4):
+def case(item, tab, name):
+    current_state = diff.get_state(item)
+    value = shaping(diff.get_value(item), tab)
+    old_value = shaping(diff.get_old_value(item), tab)
+    tmp = f'{name}: {value}\n'
+    tmp_old = f'{name}: {old_value}\n'
+    result = ''
+
+    if current_state == diff.STATE_ADD:
+        result = f"{'+ '.rjust(tab)}{tmp}"
+
+    elif current_state == diff.STATE_UPDATE:
+        result = (
+            f"{'- '.rjust(tab)}{tmp_old}"
+            f"{'+ '.rjust(tab)}{tmp}"
+        )
+
+    elif current_state == diff.STATE_REMOVE:
+        result = f"{'- '.rjust(tab)}{tmp}"
+
+    elif current_state == diff.STATE_UNMODIFIED:
+        result = f"{'  '.rjust(tab)}{tmp}"
+
+    return result
+
+
+def format_stylish(data, tab=BASE_TAB):
     result = ''
 
     data = diff.sort_alphabetically(data)
@@ -29,27 +58,10 @@ def stylish(data, tab=4):
             result += (
                 f"{' '.rjust(tab)}"
                 f"{name}: "
-                f"{stylish(diff.get_children(item), 4 + tab)}\n"
+                f"{format_stylish(diff.get_children(item), BASE_TAB + tab)}\n"
             )
         else:
-            current_state = diff.get_state(item)
-            value = shaping(diff.get_value(item), tab)
-            old_value = shaping(diff.get_old_value(item), tab)
-            tmp = f'{name}: {value}\n'
-            tmp_old = f'{name}: {old_value}\n'
-
-            if current_state == diff.STATE_ADD:
-                result += f"{'+ '.rjust(tab)}{tmp}"
-
-            elif current_state == diff.STATE_UPDATE:
-                result += f"{'- '.rjust(tab)}{tmp_old}"
-                result += f"{'+ '.rjust(tab)}{tmp}"
-
-            elif current_state == diff.STATE_REMOVE:
-                result += f"{'- '.rjust(tab)}{tmp}"
-
-            elif current_state == diff.STATE_UNMODIFIED:
-                result += f"{'  '.rjust(tab)}{tmp}"
-
+            result += case(item, tab, name)
     result = f'{{\n{result}{" " * (tab-4)}}}'
+
     return result
