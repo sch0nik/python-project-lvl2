@@ -20,6 +20,10 @@ run:
 test:
 	poetry run pytest -vv gendiff tests
 
+coverage:
+	poetry run coverage run -m pytest
+	poetry run coverage xml
+
 start: build publish package-install
 
 .PHONY: install lint runh build publsh package-install start runf
