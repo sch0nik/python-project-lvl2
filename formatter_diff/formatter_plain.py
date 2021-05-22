@@ -41,13 +41,15 @@ def format_plain(data, parents):
 
     for item in data:
         name = parents + [diff.get_name(item)]
+        # Если текущи элемент узел, заходим в глубь рекурсии
         if diff.is_node(item):
             format_str += format_plain(diff.get_children(item), name)
         else:
-            current_state = diff.get_state(item)
-            name = SEPARATOR.join(name)
-            value = shaping(diff.get_value(item))
-            old_value = shaping(diff.get_old_value(item))
+            # Здесь проработка вариантов состояния текущего элемента
+            current_state = diff.get_state(item)  # состояние лемента
+            name = SEPARATOR.join(name)  # "путь" к элемнту
+            value = shaping(diff.get_value(item))  # отформатированное значение
+            old_value = shaping(diff.get_old_value(item))   # старое значение
 
             if current_state == diff.STATE_ADD:
                 format_str += PROPERTY_ADDED.format(name, value) + '\n'
