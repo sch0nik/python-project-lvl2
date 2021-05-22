@@ -3,14 +3,12 @@
 import json
 
 import yaml
-
-from formatter_diff import format_json
-from formatter_diff import format_plain
-from formatter_diff import format_stylish
+from formatter_diff import format_json, format_plain, format_stylish
 from gendiff import processing_diff
 
 
 def compare_data(data1, data2):
+    """Сравнение двух данных."""
     key_list1 = list(data1.keys())
     key_list2 = list(data2.keys())
 
@@ -20,19 +18,22 @@ def compare_data(data1, data2):
         # get возвращает None, если такого ключа нет
         value_data1 = data1.get(item1)
         value_data2 = data2.get(item1)
+        is_type_value1 = isinstance(value_data1, dict)
+        is_type_value2 = isinstance(value_data2, dict)
 
         if item1 in key_list2:
             if value_data1 == value_data2:
                 processing_diff.add_unmodified(item1, value_data1, diff)
             else:
-                if type(value_data1) == dict and type(value_data2) == dict:
+                if is_type_value1 and is_type_value2:
                     tmp_diff = compare_data(value_data1, value_data2)
                     processing_diff.add_diff(item1, diff, tmp_diff)
                 else:
                     processing_diff.add_update(
                         item1,
-                        value_data1, value_data2,
-                        diff
+                        value_data1,
+                        value_data2,
+                        diff,
                     )
             key_list2.remove(item1)
         else:
@@ -46,13 +47,17 @@ def compare_data(data1, data2):
 
 
 def generate_diff(file1, file2, formatter):
+    """Основная функция генерирования diff.
+
+    На входд получает строки, с именами файлов и вид вывода.
+    """
     name = file1.split('.')
     name = name[-1]
 
     if name == 'json':
         file1 = json.load(open(file1))
         file2 = json.load(open(file2))
-    elif name == 'yaml' or name == 'yml':
+    elif name == 'yaml' or name == 'yml':  # noqa: WPS514
         file1 = yaml.full_load(open(file1))
         file2 = yaml.full_load(open(file2))
     else:
@@ -61,6 +66,6 @@ def generate_diff(file1, file2, formatter):
     if formatter == 'stylish':
         return format_stylish(compare_data(file1, file2))
     elif formatter == 'plain':
-        return format_plain(compare_data(file1, file2))
+        return format_plain(compare_data(file1, file2), [])
     elif formatter == 'json':
         return format_json(compare_data(file1, file2))

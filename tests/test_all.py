@@ -34,3 +34,15 @@ def test_generate_diff_stylish():
 
     assert received_result_json == expected_result_stylish
     assert received_result_yaml == expected_result_stylish
+
+
+def test_generate_diff_json():
+    result_file = open('tests/fixtures/result_json.json')
+    expected_result = result_file.read()
+    result_file.close()
+
+    file_a = 'tests/fixtures/file1.json'
+    file_b = 'tests/fixtures/file2.json'
+    received_result_json = generate_diff(file_a, file_b, 'json')
+
+    assert received_result_json == expected_result

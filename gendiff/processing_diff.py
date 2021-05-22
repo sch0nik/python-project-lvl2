@@ -1,135 +1,166 @@
+"""Модуль внутреннего представления дифа."""
 # Внутренее представление diff:
-# diff = [
-# {
-#     state: ['+', '-', ' ', '_' ] - состояние:
-#                                       +    добавили,
-#                                       -    удалили,
-#                                       _    именилось значение
-#                                       ' '  неизменился,
+# Это список словарей diff = [
+# { state: ['+', '-', ' ', '_' ] - состояние:
+#                                +    добавили,
+#                                -    удалили,
+#                                _    именилось значение
+#                               ' '   неизменился,
 #     key: key                  - ключ из оригинального словаря
 #     children: [{}, {}], None  - либо список словарей, либо None
 #     value: value, None        - если children список, то None
 #                                 иначе value
 #     old_value: value          - только для случаев когда ключ остался,
 #                                 а значение изменилось
-# }, ....
-# ]
+# }, ....]
 from copy import deepcopy
+
 STATE_ADD = '+'
 STATE_REMOVE = '-'
 STATE_UNMODIFIED = ' '
 STATE_UPDATE = '_'
 
+STATE = 'state'
+KEY = 'key'
+CHILDREN = 'children'
+VALUE = 'value'
+OLD_VALUE = 'old_value'
+
 
 def create_diff():
+    """Дифф это список."""
     return []
 
 
 def add_delete(key, data, diff):
+    """Добавление удаленного элемента."""
     new_data = deepcopy(data)
     diff.append(
         {
-            'state': STATE_REMOVE,
-            'key': key,
-            'children': None,
-            'value': new_data,
-        }
+            STATE: STATE_REMOVE,
+            KEY: key,
+            CHILDREN: None,
+            VALUE: new_data,
+        },
     )
 
 
 def add_unmodified(key, data, diff):
+    """Добавление неизмененного элемента."""
     new_data = deepcopy(data)
     diff.append(
         {
-            'state': STATE_UNMODIFIED,
-            'key': key,
-            'children': None,
-            'value': new_data,
-        }
+            STATE: STATE_UNMODIFIED,
+            KEY: key,
+            CHILDREN: None,
+            VALUE: new_data,
+        },
     )
 
 
 def add_update(key, data1, data2, diff):
+    """Добавление измененного элемента."""
     new_data1 = deepcopy(data1)
     new_data2 = deepcopy(data2)
     diff.append(
         {
-            'state': STATE_UPDATE,
-            'key': key,
-            'old_value': new_data1,
-            'children': None,
-            'value': new_data2,
-        }
+            STATE: STATE_UPDATE,
+            KEY: key,
+            OLD_VALUE: new_data1,
+            CHILDREN: None,
+            VALUE: new_data2,
+        },
     )
 
 
 def add_add(key, data, diff):
+    """Добавление добавленного элемента."""
     new_data = deepcopy(data)
     diff.append(
         {
-            'state': STATE_ADD,
-            'key': key,
-            'children': None,
-            'value': new_data,
-        }
+            STATE: STATE_ADD,
+            KEY: key,
+            CHILDREN: None,
+            VALUE: new_data,
+        },
     )
 
 
 def add_diff(key, diff1, diff2):
+    """Добавление вложенного дифа."""
     diff1.extend([
         {
-            'state': STATE_UPDATE,
-            'key': key,
-            'children': diff2,
-            'value': None,
-        }
+            STATE: STATE_UPDATE,
+            KEY: key,
+            CHILDREN: diff2,
+            VALUE: None,
+        },
     ])
 
 
 def get_name(data):
-    return data['key']
+    """Возвращает имя элемента."""
+    return data[KEY]
 
 
 def get_state(data):
-    return data['state']
+    """Возвращает состояние элемента."""
+    return data[STATE]
 
 
 def get_value(data):
-    return data['value']
+    """Возвращает значение элемента."""
+    return data[VALUE]
 
 
 def get_children(data):
-    return data['children']
+    """Возвращает детей элемента."""
+    return data[CHILDREN]
 
 
 def is_value(data):
-    if type(data) == list:
+    """Проверка на то, что data это элемент."""
+    if isinstance(data, list):
         return False
-    return data.get('children') is None
+    return data.get(CHILDREN) is None
 
 
 def is_node(data):
-    return not data.get('children') is None
+    """Проверка что data это элемент с ребенком.
+
+    Т.е. у текущего элемента есть вложенные элементы.
+    """
+    return data.get(CHILDREN) is not None
 
 
 def is_complex(data):
-    return type(data) == dict
+    """Проверка что data это сложное значение.
+
+    Для форматтера plain.
+    """
+    return isinstance(data, dict)
 
 
 def get_old_value(data):
-    return data.get('old_value')
+    """Возврат старого значение.
+
+    Для ключей у которых изменились значения.
+    """
+    return data.get(OLD_VALUE)
 
 
 def sort_alphabetically(data):
-    return sorted(data, key=lambda x: x['key'])
+    """Сортировка."""
+    return sorted(data, key=lambda item: item[KEY])
 
 
 def get_str_state(item):
-    if item['state'] == STATE_ADD:
+    """Вывод состояния элемента в строку."""
+    if item[STATE] == STATE_ADD:
         return 'ADD'
-    if item['state'] == STATE_REMOVE:
+    if item[STATE] == STATE_REMOVE:
         return 'REMOVE'
-    if item['state'] == STATE_UNMODIFIED:
+    if item[STATE] == STATE_UNMODIFIED:
         return 'UNMODIFIED'
-    if item['state'] == STATE_UPDATE:
+    if item[STATE] == STATE_UPDATE:
         return 'UPDATE'

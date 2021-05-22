@@ -11,7 +11,11 @@ from gendiff.generate_difference import generate_diff
 
 
 def create_pars():
-    """Создание парсера параметров."""
+    """Создание парсера параметров.
+
+    Returns:
+        возвращает созданный парсер.
+    """
     parser = argparse.ArgumentParser(description='Generate diff')
     parser.add_argument(
         'first_file',
@@ -32,12 +36,17 @@ def create_pars():
 
 
 def main():
+    """Главная функция.
+
+    Обработка параметров команднойй строки.
+    И вывод результата.
+    """
     pars = create_pars().parse_args()
     print(generate_diff(
         pars.first_file.name,
         pars.second_file.name,
         pars.format,
-    )
+    ),
     )
 
 

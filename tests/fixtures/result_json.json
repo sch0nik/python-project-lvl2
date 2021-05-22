@@ -1,128 +1,58 @@
-[
-  {
-    "state": "_",
-    "key": "common",
-    "children": [
-      {
-        "state": " ",
-        "key": "setting1",
-        "children": null,
-        "value": "Value 1"
+{
+  "UPDATE": {
+    "common": {
+      "UNMODIFIED": {
+        "setting1": "Value 1"
       },
-      {
-        "state": "-",
-        "key": "setting2",
-        "children": null,
-        "value": 200
+      "REMOVE": {
+        "setting2": 200
       },
-      {
-        "state": "_",
-        "key": "setting3",
-        "old_value": true,
-        "children": null,
-        "value": null
-      },
-      {
-        "state": "_",
-        "key": "setting6",
-        "children": [
-          {
-            "state": " ",
-            "key": "key",
-            "children": null,
-            "value": "value"
+      "UPDATE": {
+        "setting3": null,
+        "setting6": {
+          "UNMODIFIED": {
+            "key": "value"
           },
-          {
-            "state": "_",
-            "key": "doge",
-            "children": [
-              {
-                "state": "_",
-                "key": "wow",
-                "old_value": "",
-                "children": null,
-                "value": "so much"
+          "UPDATE": {
+            "doge": {
+              "UPDATE": {
+                "wow": "so much"
               }
-            ],
-            "value": null
+            }
           },
-          {
-            "state": "+",
-            "key": "ops",
-            "children": null,
-            "value": "vops"
+          "ADD": {
+            "ops": "vops"
           }
-        ],
-        "value": null
+        }
       },
-      {
-        "state": "+",
-        "key": "follow",
-        "children": null,
-        "value": false
-      },
-      {
-        "state": "+",
-        "key": "setting4",
-        "children": null,
-        "value": "blah blah"
-      },
-      {
-        "state": "+",
-        "key": "setting5",
-        "children": null,
-        "value": {
+      "ADD": {
+        "follow": false,
+        "setting4": "blah blah",
+        "setting5": {
           "key5": "value5"
         }
       }
-    ],
-    "value": null
-  },
-  {
-    "state": "_",
-    "key": "group1",
-    "children": [
-      {
-        "state": "_",
-        "key": "baz",
-        "old_value": "bas",
-        "children": null,
-        "value": "bars"
+    },
+    "group1": {
+      "UPDATE": {
+        "baz": "bars",
+        "nest": "str"
       },
-      {
-        "state": " ",
-        "key": "foo",
-        "children": null,
-        "value": "bar"
-      },
-      {
-        "state": "_",
-        "key": "nest",
-        "old_value": {
-          "key": "value"
-        },
-        "children": null,
-        "value": "str"
+      "UNMODIFIED": {
+        "foo": "bar"
       }
-    ],
-    "value": null
+    }
   },
-  {
-    "state": "-",
-    "key": "group2",
-    "children": null,
-    "value": {
+  "REMOVE": {
+    "group2": {
       "abc": 12345,
       "deep": {
         "id": 45
       }
     }
   },
-  {
-    "state": "+",
-    "key": "group3",
-    "children": null,
-    "value": {
+  "ADD": {
+    "group3": {
       "deep": {
         "id": {
           "number": 45
@@ -131,4 +61,4 @@
       "fee": 100500
     }
   }
-]
+}
