@@ -1,12 +1,12 @@
-"""Функции для сравнения двух словарей."""
+"""Функция для сравнения двух словарей."""
 
 import json
 
 import yaml
 
-from formatter_diff.json import format_json
-from formatter_diff.plain import format_plain
-from formatter_diff.stylish import format_stylish
+from formatter_diff import format_json
+from formatter_diff import format_plain
+from formatter_diff import format_stylish
 from gendiff import processing_diff
 
 

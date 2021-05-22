@@ -14,7 +14,7 @@
 #                                 а значение изменилось
 # }, ....
 # ]
-import copy
+from copy import deepcopy
 STATE_ADD = '+'
 STATE_REMOVE = '-'
 STATE_UNMODIFIED = ' '
@@ -26,7 +26,7 @@ def create_diff():
 
 
 def add_delete(key, data, diff):
-    new_data = copy.deepcopy(data)
+    new_data = deepcopy(data)
     diff.append(
         {
             'state': STATE_REMOVE,
@@ -38,7 +38,7 @@ def add_delete(key, data, diff):
 
 
 def add_unmodified(key, data, diff):
-    new_data = copy.deepcopy(data)
+    new_data = deepcopy(data)
     diff.append(
         {
             'state': STATE_UNMODIFIED,
@@ -50,8 +50,8 @@ def add_unmodified(key, data, diff):
 
 
 def add_update(key, data1, data2, diff):
-    new_data1 = copy.deepcopy(data1)
-    new_data2 = copy.deepcopy(data2)
+    new_data1 = deepcopy(data1)
+    new_data2 = deepcopy(data2)
     diff.append(
         {
             'state': STATE_UPDATE,
@@ -64,7 +64,7 @@ def add_update(key, data1, data2, diff):
 
 
 def add_add(key, data, diff):
-    new_data = copy.deepcopy(data)
+    new_data = deepcopy(data)
     diff.append(
         {
             'state': STATE_ADD,
@@ -78,7 +78,7 @@ def add_add(key, data, diff):
 def add_diff(key, diff1, diff2):
     diff1.extend([
         {
-            'state': STATE_UNMODIFIED,
+            'state': STATE_UPDATE,
             'key': key,
             'children': diff2,
             'value': None,
@@ -122,3 +122,14 @@ def get_old_value(data):
 
 def sort_alphabetically(data):
     return sorted(data, key=lambda x: x['key'])
+
+
+def get_str_state(item):
+    if item['state'] == STATE_ADD:
+        return 'ADD'
+    if item['state'] == STATE_REMOVE:
+        return 'REMOVE'
+    if item['state'] == STATE_UNMODIFIED:
+        return 'UNMODIFIED'
+    if item['state'] == STATE_UPDATE:
+        return 'UPDATE'
