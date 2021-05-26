@@ -69,7 +69,7 @@ def compare_data(data1, data2):
 def generate_diff(file1, file2, formatter):
     """Основная функция генерирования diff.
 
-    На входд получает строки, с именами файлов и вид вывода.
+    На вход получает строки, с именами файлов и вид вывода.
     """
     name = file1.split('.')
     name = name[-1]
