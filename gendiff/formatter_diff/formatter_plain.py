@@ -37,7 +37,6 @@ def format_plain(data, parents):
         format_str: строка приведенная к нужному виду.
     """
     format_str = ''
-    data = diff.sort_alphabetically(data)
 
     for item in data:
         name = parents + [diff.get_name(item)]

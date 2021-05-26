@@ -1,11 +1,11 @@
 """Модуль внутреннего представления дифа."""
 # Внутренее представление diff:
 # Это список словарей diff = [
-# { state: ['+', '-', ' ', '_' ] - состояние:
-#                                +    добавили,
-#                                -    удалили,
-#                                _    именилось значение
-#                               ' '   неизменился,
+# { state: ['added', 'removed', 'unmodfied', 'updated' ] - состояние:
+#                                'added'    добавили,
+#                                'removed'    удалили,
+#                                'updated'    именилось значение
+#                                'unmodfied'   неизменился,
 #     key: key                  - ключ из оригинального словаря
 #     children: [{}, {}], None  - либо список словарей, либо None
 #     value: value, None        - если children список, то None
@@ -15,10 +15,10 @@
 # }, ....]
 from copy import deepcopy
 
-STATE_ADD = '+'
-STATE_REMOVE = '-'
-STATE_UNMODIFIED = ' '
-STATE_UPDATE = '_'
+STATE_ADD = 'added'
+STATE_REMOVE = 'removed'
+STATE_UNMODIFIED = 'unmodfied'
+STATE_UPDATE = 'updated'
 
 STATE = 'state'
 KEY = 'key'
@@ -43,6 +43,7 @@ def add_delete(key, data, diff):
             VALUE: new_data,
         },
     )
+    diff.sort(key=lambda item: item[KEY])
 
 
 def add_unmodified(key, data, diff):
@@ -56,6 +57,7 @@ def add_unmodified(key, data, diff):
             VALUE: new_data,
         },
     )
+    diff.sort(key=lambda item: item[KEY])
 
 
 def add_update(key, data1, data2, diff):
@@ -71,6 +73,7 @@ def add_update(key, data1, data2, diff):
             VALUE: new_data2,
         },
     )
+    diff.sort(key=lambda item: item[KEY])
 
 
 def add_add(key, data, diff):
@@ -84,6 +87,7 @@ def add_add(key, data, diff):
             VALUE: new_data,
         },
     )
+    diff.sort(key=lambda item: item[KEY])
 
 
 def add_diff(key, diff1, diff2):
@@ -96,6 +100,7 @@ def add_diff(key, diff1, diff2):
             VALUE: None,
         },
     ])
+    diff1.sort(key=lambda item: item[KEY])
 
 
 def get_name(data):

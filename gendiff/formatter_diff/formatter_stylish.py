@@ -84,7 +84,6 @@ def format_stylish(data, tab=BASE_TAB):
     result = ''
     space = ' '
 
-    data = diff.sort_alphabetically(data)
     for item in data:
         name = diff.get_name(item)
         if diff.is_node(item):

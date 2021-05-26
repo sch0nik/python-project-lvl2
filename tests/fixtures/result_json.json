@@ -1,6 +1,13 @@
 {
   "UPDATE": {
     "common": {
+      "ADD": {
+        "follow": false,
+        "setting4": "blah blah",
+        "setting5": {
+          "key5": "value5"
+        }
+      },
       "UNMODIFIED": {
         "setting1": "Value 1"
       },
@@ -10,9 +17,6 @@
       "UPDATE": {
         "setting3": null,
         "setting6": {
-          "UNMODIFIED": {
-            "key": "value"
-          },
           "UPDATE": {
             "doge": {
               "UPDATE": {
@@ -20,16 +24,12 @@
               }
             }
           },
+          "UNMODIFIED": {
+            "key": "value"
+          },
           "ADD": {
             "ops": "vops"
           }
-        }
-      },
-      "ADD": {
-        "follow": false,
-        "setting4": "blah blah",
-        "setting5": {
-          "key5": "value5"
         }
       }
     },
