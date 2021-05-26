@@ -1,9 +1,9 @@
 """Модуль для форматтера plain."""
 from gendiff import processing_diff as diff
 
-PROPERTY_ADDED = "Property \'{}\' was added with value: {}"
-PROPERTY_UPDATED = "Property \'{}\' was updated. From {} to {}"
-PROPERTY_REMOVED = "Property \'{}\' was removed"
+PROPERTY_ADDED = "Property \'{}\' was added with value: {}"  # noqa: P103
+PROPERTY_UPDATED = "Property \'{}\' was updated. From {} to {}"  # noqa: P103
+PROPERTY_REMOVED = "Property \'{}\' was removed"  # noqa: P103
 COMPLEX_VALUE = '[complex value]'
 SEPARATOR = '.'
 

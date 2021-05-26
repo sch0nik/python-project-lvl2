@@ -3,8 +3,8 @@
 import json
 
 import yaml
-from formatter_diff import format_json, format_plain, format_stylish
 from gendiff import processing_diff
+from gendiff.formatter_diff import format_json, format_plain, format_stylish
 
 
 def compare_data(data1, data2):

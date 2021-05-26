@@ -2,9 +2,7 @@ install:
 	poetry install
 
 lint:
-	poetry run flake8 gendiff formatter_diff
-	poetry run flake8 formatter_diff
-
+	poetry run flake8 gendiff
 build:
 	poetry build
 
