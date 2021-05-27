@@ -19,6 +19,7 @@ STATE_ADD = 'added'
 STATE_REMOVE = 'removed'
 STATE_UNMODIFIED = 'unmodfied'
 STATE_UPDATE = 'updated'
+STATE_NESTED = 'nested'
 
 STATE = 'state'
 KEY = 'key'
@@ -161,11 +162,14 @@ def sort_alphabetically(data):
 
 def get_str_state(item):
     """Вывод состояния элемента в строку."""
-    if item[STATE] == STATE_ADD:
+    state = item[STATE]
+    if state == STATE_ADD:
         return 'ADD'
-    if item[STATE] == STATE_REMOVE:
+    if state == STATE_REMOVE:
         return 'REMOVE'
-    if item[STATE] == STATE_UNMODIFIED:
+    if state == STATE_UNMODIFIED:
         return 'UNMODIFIED'
-    if item[STATE] == STATE_UPDATE:
+    if state == STATE_UPDATE:
+        return 'UPDATE'
+    if state == STATE_NESTED:
         return 'UPDATE'
