@@ -93,7 +93,7 @@ def compare_data(data1, data2):  # noqa: WPS213
     return diff
 
 
-def generate_diff(file1, file2, formatter):
+def generate_diff(file1, file2, formatter='stylish'):
     """Основная функция генерирования diff.
 
     На вход получает строки, с именами файлов и вид вывода.
