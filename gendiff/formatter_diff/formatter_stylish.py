@@ -2,9 +2,6 @@
 from gendiff import processing_diff as diff
 
 BASE_TAB = 4
-ELEMENT_ADD = '+ '
-ELEMENT_REMOVE = '- '
-ELEMENT_UNMODIFIED = ' '
 
 
 def shaping(value, tab):
@@ -24,51 +21,15 @@ def shaping(value, tab):
         return 'null'
     elif isinstance(value, dict):
         keys = list(value.keys())
-        keys = sorted(keys)
+        keys.sort()
         result = ''
+        indent = f'{space * (tab  + BASE_TAB)}'
         for item in keys:  # noqa: WPS519
             result += (
-                f'{space * (tab  + BASE_TAB)}'
-                f'{item}: {shaping(value[item], tab + 4)}\n'
+                indent + f'{item}: {shaping(value[item], tab + BASE_TAB)}\n'
             )
         return f'{{\n{result}{space * tab}}}'
     return str(value)
-
-
-def case(item, tab, name):
-    """Составление строки в зависимости от состояния item.
-
-    Args:
-        item: проверяемый элемент,
-        tab: количество отступов,
-        name: значение ключа элемента дифа.
-
-    Returns:
-        Строку результата.
-    """
-    current_state = diff.get_state(item)
-    value = shaping(diff.get_value(item), tab)
-    old_value = shaping(diff.get_old_value(item), tab)
-    tmp = f'{name}: {value}\n'
-    tmp_old = f'{name}: {old_value}\n'
-    result = ''
-
-    if current_state == diff.STATE_ADD:
-        result = f'{ELEMENT_ADD.rjust(tab)}{tmp}'
-
-    elif current_state == diff.STATE_UPDATE:
-        result = (
-            f'{ELEMENT_REMOVE.rjust(tab)}{tmp_old}'
-            f'{ELEMENT_ADD.rjust(tab)}{tmp}'
-        )
-
-    elif current_state == diff.STATE_REMOVE:
-        result = f'{ELEMENT_REMOVE.rjust(tab)}{tmp}'
-
-    elif current_state == diff.STATE_UNMODIFIED:
-        result = f'{ELEMENT_UNMODIFIED.rjust(tab)}{tmp}'
-
-    return result
 
 
 def format_stylish(data, tab=BASE_TAB):
@@ -84,14 +45,34 @@ def format_stylish(data, tab=BASE_TAB):
     result = ''
     space = ' '
 
+    # Строковые константы для вывода.
+    dict_diff = {
+        diff.STATE_ADD: '+ {0}: {1}\n',
+        diff.STATE_UPDATE: '- {0}: {2}\n{3}+ {0}: {1}\n',
+        diff.STATE_REMOVE: '- {0}: {1}\n',
+        diff.STATE_UNMODIFIED: '  {0}: {1}\n',
+        diff.STATE_NESTED: '{0}: {1}\n',
+    }
+
+    space = f'{space: >{tab}}'
     for item in data:
         name = diff.get_name(item)
-        if diff.is_node(item):
-            result += (
-                f'{space.rjust(tab)}{name}: '
-                f'{format_stylish(diff.get_children(item), BASE_TAB + tab)}\n'
-            )
-        else:
-            result += case(item, tab, name)
+        current_state = diff.get_state(item)
 
-    return f'{{\n{result}{space * (tab-4)}}}'
+        if diff.is_node(item):
+            tmp = f'{format_stylish(diff.get_children(item), BASE_TAB + tab)}'
+            tmp = dict_diff[current_state].format(name, tmp, '', space)
+            tmp = space + tmp
+        else:
+            value = shaping(diff.get_value(item), tab)
+            old_value = shaping(diff.get_old_value(item), tab)
+            tmp = space[:-2] + dict_diff[current_state].format(
+                name,
+                value,
+                old_value,
+                space[:-2],
+            )
+
+        result += tmp
+
+    return f'{{\n{result}{space[:-4]}}}'

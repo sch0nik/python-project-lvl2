@@ -1,12 +1,6 @@
 """Модуль для форматтера plain."""
 from gendiff import processing_diff as diff
 
-PROPERTY_ADDED = "Property \'{}\' was added with value: {}"  # noqa: P103
-PROPERTY_UPDATED = "Property \'{}\' was updated. From {} to {}"  # noqa: P103
-PROPERTY_REMOVED = "Property \'{}\' was removed"  # noqa: P103
-COMPLEX_VALUE = '[complex value]'
-SEPARATOR = '.'
-
 
 def shaping(value):
     """Приведение value к нужной форме.
@@ -22,43 +16,34 @@ def shaping(value):
     elif value is None:
         return 'null'
     elif diff.is_complex(value):
-        return COMPLEX_VALUE
+        return '[complex value]'
     return f"\'{str(value)}\'"
 
 
-def format_plain(data, parents):
-    """Форматтер plain.
+def format_plain(data, parents=''):
+    """Форматирование вывода в виде plain."""
+    # Словарь строковых констант.
+    dict_diff = {
+        diff.STATE_ADD: "Property \'{0}\' was added with value: {1}\n",
+        diff.STATE_UPDATE: "Property \'{0}\' was updated. From {2} to {1}\n",
+        diff.STATE_REMOVE: "Property \'{0}\' was removed\n",
+        diff.STATE_UNMODIFIED: '',
+    }
 
-    Args:
-        data: сам diff.
-        parents: список имен вложенности.
-
-    Returns:
-        format_str: строка приведенная к нужному виду.
-    """
     format_str = ''
-
     for item in data:
-        name = parents + [diff.get_name(item)]
-        # Если текущи элемент узел, заходим в глубь рекурсии
+
+        name = diff.get_name(item)
+        name = f'{parents}.{name}' if parents else name
+        current_state = diff.get_state(item)
+
         if diff.is_node(item):
-            format_str += format_plain(diff.get_children(item), name)
+            tmp = format_plain(diff.get_children(item), name)
         else:
-            # Здесь проработка вариантов состояния текущего элемента
-            current_state = diff.get_state(item)  # состояние лемента
-            name = SEPARATOR.join(name)  # "путь" к элемнту
-            value = shaping(diff.get_value(item))  # отформатированное значение
-            old_value = shaping(diff.get_old_value(item))   # старое значение
+            value = shaping(diff.get_value(item))
+            old_value = shaping(diff.get_old_value(item))
+            tmp = dict_diff[current_state].format(name, value, old_value)
 
-            if current_state == diff.STATE_ADD:
-                format_str += PROPERTY_ADDED.format(name, value) + '\n'
-
-            elif current_state == diff.STATE_UPDATE:
-                format_str += (
-                    PROPERTY_UPDATED.format(name, old_value, value) + '\n'
-                )
-
-            elif current_state == diff.STATE_REMOVE:
-                format_str += PROPERTY_REMOVED.format(name) + '\n'
+        format_str += tmp
 
     return format_str

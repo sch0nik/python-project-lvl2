@@ -1,11 +1,12 @@
 """Модуль внутреннего представления дифа."""
 # Внутренее представление diff:
 # Это список словарей diff = [
-# { state: ['added', 'removed', 'unmodfied', 'updated' ] - состояние:
-#                                'added'    добавили,
-#                                'removed'    удалили,
-#                                'updated'    именилось значение
-#                                'unmodfied'   неизменился,
+# { state: ['added', 'removed', ... ] - состояние:
+#                                'added'     добавили,
+#                                'removed'   удалили,
+#                                'updated'   именилось значение
+#                                'unmodfied' неизменился,
+#                                'nested'    вложенный,
 #     key: key                  - ключ из оригинального словаря
 #     children: [{}, {}], None  - либо список словарей, либо None
 #     value: value, None        - если children список, то None
@@ -95,7 +96,7 @@ def add_diff(key, diff1, diff2):
     """Добавление вложенного дифа."""
     diff1.extend([
         {
-            STATE: STATE_UPDATE,
+            STATE: STATE_NESTED,
             KEY: key,
             CHILDREN: diff2,
             VALUE: None,
@@ -104,60 +105,48 @@ def add_diff(key, diff1, diff2):
     diff1.sort(key=lambda item: item[KEY])
 
 
-def get_name(data):
+def get_name(item):
     """Возвращает имя элемента."""
-    return data[KEY]
+    return item[KEY]
 
 
-def get_state(data):
+def get_state(item):
     """Возвращает состояние элемента."""
-    return data[STATE]
+    return item[STATE]
 
 
-def get_value(data):
+def get_value(item):
     """Возвращает значение элемента."""
-    return data[VALUE]
+    return item[VALUE]
 
 
-def get_children(data):
+def get_children(item):
     """Возвращает детей элемента."""
-    return data[CHILDREN]
+    return item[CHILDREN]
 
 
-def is_value(data):
-    """Проверка на то, что data это элемент."""
-    if isinstance(data, list):
-        return False
-    return data.get(CHILDREN) is None
-
-
-def is_node(data):
+def is_node(item):
     """Проверка что data это элемент с ребенком.
 
     Т.е. у текущего элемента есть вложенные элементы.
     """
-    return data.get(CHILDREN) is not None
+    return item[STATE] == STATE_NESTED
 
 
-def is_complex(data):
+def is_complex(item):
     """Проверка что data это сложное значение.
 
     Для форматтера plain.
     """
-    return isinstance(data, dict)
+    return isinstance(item, dict)
 
 
-def get_old_value(data):
+def get_old_value(item):
     """Возврат старого значение.
 
     Для ключей у которых изменились значения.
     """
-    return data.get(OLD_VALUE)
-
-
-def sort_alphabetically(data):
-    """Сортировка."""
-    return sorted(data, key=lambda item: item[KEY])
+    return item.get(OLD_VALUE)
 
 
 def get_str_state(item):

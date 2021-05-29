@@ -113,7 +113,7 @@ def generate_diff(file1, file2, formatter):
     if formatter == 'stylish':
         return format_stylish(compare_data(file1, file2))
     elif formatter == 'plain':
-        return format_plain(compare_data(file1, file2), [])
+        return format_plain(compare_data(file1, file2))
     elif formatter == 'json':
         return format_json(compare_data(file1, file2))
     return 'Не известный формат.'
