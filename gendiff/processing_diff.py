@@ -104,12 +104,6 @@ def add_diff(key, diff1, diff2):
     diff1.sort(key=lambda item: item[KEY])
 
 
-def extend_diff(diff1, diff2):
-    """Добавление другого дифа."""
-    diff1.extend(diff2)
-    diff1.sort(diff1, key=lambda item: item[STATE])
-
-
 def get_name(data):
     """Возвращает имя элемента."""
     return data[KEY]
