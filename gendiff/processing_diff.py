@@ -45,7 +45,6 @@ def add_delete(key, data, diff):
             VALUE: new_data,
         },
     )
-    # diff.sort(key=lambda item: item[KEY])
 
 
 def add_unmodified(key, data, diff):
@@ -59,7 +58,6 @@ def add_unmodified(key, data, diff):
             VALUE: new_data,
         },
     )
-    # diff.sort(key=lambda item: item[KEY])
 
 
 def add_update(key, data1, data2, diff):
@@ -75,7 +73,6 @@ def add_update(key, data1, data2, diff):
             VALUE: new_data2,
         },
     )
-    # diff.sort(key=lambda item: item[KEY])
 
 
 def add_add(key, data, diff):
@@ -89,7 +86,6 @@ def add_add(key, data, diff):
             VALUE: new_data,
         },
     )
-    # diff.sort(key=lambda item: item[KEY])
 
 
 def add_diff(key, diff1, diff2):
@@ -102,7 +98,6 @@ def add_diff(key, diff1, diff2):
             VALUE: None,
         },
     ])
-    # diff1.sort(key=lambda item: item[KEY])
 
 
 def get_name(item):
