@@ -7,10 +7,7 @@ from gendiff import processing_diff as proc_diff
 from gendiff.formatter_diff import format_json, format_plain, format_stylish
 
 
-# Линтер ругался что в этой функции слишком много выражений.
-# Я отключил проверку этого правила. Мне кажется что все норм )))
-# Но возможно можно что-то сделать еще. Но пока не придумал.
-def compare_data(data1, data2):  # noqa: WPS213
+def compare_data(data1, data2):
     """Сравнение двух данных."""
     # Логика работы:
     # - делаю множества ключей обоих списков
