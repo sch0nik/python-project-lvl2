@@ -28,11 +28,6 @@ def compare_data(data1, data2):  # noqa: WPS213
     # Это остальные ключи, за вычетом первых двух множеств
     items_rest = list(set_data1 & set_data2)
 
-    # Все списки заранее сортирую
-    items_add.sort()
-    items_remove.sort()
-    items_rest.sort()
-
     # В этом блоке из списка оставшихся ключей получаю:
     items_unmod = []  # список ключей которые не изменились
     items_update = []  # список ключей значения которых изменились
