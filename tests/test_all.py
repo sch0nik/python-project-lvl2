@@ -15,8 +15,8 @@ def test_generate_diff_plain():
     file_b = 'tests/fixtures/file2.yaml'
     received_result_yaml = generate_diff(file_a, file_b, 'plain')
 
-    assert received_result_json == expected_result
     assert received_result_yaml == expected_result
+    assert received_result_json == expected_result
 
 
 def test_generate_diff_stylish():

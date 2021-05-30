@@ -39,7 +39,6 @@ def format_plain(data, parents=''):
         name = f'{parents}.{name}' if parents else name
         current_state = diff.get_state(item)
 
-        # Если нода, то
         if diff.is_node(item):
             tmp = format_plain(diff.get_children(item), name)
         else:
@@ -49,4 +48,6 @@ def format_plain(data, parents=''):
 
         format_str += tmp
 
+    if not parents:
+        format_str = format_str[:-1]
     return format_str
