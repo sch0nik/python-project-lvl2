@@ -15,6 +15,8 @@ def shaping(value):
         return str(value).lower()
     elif value is None:
         return 'null'
+    elif isinstance(value, int):
+        return value
     elif diff.is_complex(value):
         return '[complex value]'
     return f"\'{str(value)}\'"
