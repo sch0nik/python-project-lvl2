@@ -21,6 +21,7 @@ test:
 coverage:
 	poetry run coverage run -m pytest
 	poetry run coverage xml
+	poetry run coverage html
 
 start: build publish package-install
 
