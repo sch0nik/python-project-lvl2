@@ -1,8 +1,8 @@
 """Модуль для форматтера plain."""
-from gendiff import processing_diff as diff
+from gendiff.processing_diff import apy_diff as diff
 
 
-def shaping(value):
+def value_formatting(value):
     """Приведение value к нужной форме.
 
     Args:
@@ -22,7 +22,7 @@ def shaping(value):
     return f"\'{str(value)}\'"
 
 
-def format_plain(data, parents=''):
+def format_plain(data, parents=''):  # noqa: WPS210
     """Форматирование вывода в виде plain."""
     # Словарь строковых констант.
     dict_diff = {
@@ -42,8 +42,8 @@ def format_plain(data, parents=''):
         if diff.is_node(item):
             tmp = format_plain(diff.get_children(item), name)
         else:
-            value = shaping(diff.get_value(item))
-            old_value = shaping(diff.get_old_value(item))
+            value = value_formatting(diff.get_value(item))
+            old_value = value_formatting(diff.get_old_value(item))
             tmp = dict_diff[current_state].format(name, value, old_value)
 
         format_str += tmp

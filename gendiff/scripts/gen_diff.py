@@ -5,7 +5,7 @@
 Программа определяющая разницу между двумя структурами данных.
 """
 from gendiff.generate_difference import generate_diff
-from gendiff.parser_gendiff import create_pars
+from gendiff.parser import create_pars
 
 
 def main():
@@ -15,11 +15,12 @@ def main():
     И вывод результата.
     """
     pars = create_pars()
-    print(generate_diff(
-        pars.first_file,
-        pars.second_file,
-        pars.format,
-    ),
+    print(
+        generate_diff(
+            pars.first_file,
+            pars.second_file,
+            pars.format,
+        ),
     )
 
 

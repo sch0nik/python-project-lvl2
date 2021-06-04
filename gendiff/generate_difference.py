@@ -3,31 +3,8 @@
 import json
 
 import yaml
-from gendiff import processing_diff as proc_diff
-from gendiff.formatter_diff import format_json, format_plain, format_stylish
-
-
-def compare_data(data1, data2):
-    """Сравнение двух данных."""
-    diff = proc_diff.create_diff()
-    keys = sorted(data1.keys() | data2.keys())
-    for key in keys:
-        type_data = (
-            isinstance(data1.get(key), dict) and  # noqa: W504
-            isinstance(data2.get(key), dict)
-        )
-        if key in data1 and key not in data2:
-            proc_diff.add_delete(key, data1[key], diff)
-        elif key not in data1 and key in data2:
-            proc_diff.add_add(key, data2[key], diff)  # noqa: WPS204
-        elif data1[key] == data2[key]:
-            proc_diff.add_unmodified(key, data2[key], diff)
-        elif type_data:
-            proc_diff.add_diff(key, diff, compare_data(data1[key], data2[key]))
-        else:
-            proc_diff.add_update(key, data1[key], data2[key], diff)
-
-    return diff
+from gendiff.formatters import format_json, format_plain, format_stylish
+from gendiff.processing_diff.formation_diff import compare_data
 
 
 def generate_diff(file1, file2, formatter='stylish'):
