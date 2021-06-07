@@ -41,7 +41,7 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
         tab: отступ.
 
     Returns:
-        Форматированная строка в виде styish.
+        Форматированная строка в виде stylish.
     """
     result = ''
     space = ' '
