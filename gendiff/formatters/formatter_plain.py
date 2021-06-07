@@ -3,14 +3,7 @@ from gendiff.processing_diff import apy_diff as diff
 
 
 def value_formatting(value):
-    """Приведение value к нужной форме.
-
-    Args:
-        value: значение, которое нужно привести к заданной форме.
-
-    Returns:
-        Форматированная строка.
-    """
+    """Приведение value к нужной форме."""
     if value is True or value is False:
         return str(value).lower()
     elif value is None:
@@ -48,6 +41,5 @@ def format_plain(data, parents=''):  # noqa: WPS210
 
         format_str.append(tmp)
 
-    format_str = [item for item in format_str if item]
-    format_str = '\n'.join(format_str)
-    return format_str
+    format_str = [elem for elem in format_str if elem]
+    return '\n'.join(format_str)

@@ -1,9 +1,11 @@
+"""Парсер файлов."""
 import json
 
 import yaml
 
 
 def parser(file1, file2):
+    """Парсер файлов."""
     name1 = file1.split('.')
     name1 = name1[-1]
 
@@ -18,5 +20,4 @@ def parser(file1, file2):
         file1 = yaml.full_load(open(file1))
         file2 = yaml.full_load(open(file2))
         return file1, file2
-    else:
-        return None, None
+    return None, None

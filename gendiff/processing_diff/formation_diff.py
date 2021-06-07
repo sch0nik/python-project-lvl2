@@ -18,7 +18,6 @@
 """
 from copy import deepcopy
 
-
 STATE_ADD = 'added'
 STATE_REMOVE = 'removed'
 STATE_UNMODIFIED = 'unmodfied'
@@ -32,95 +31,62 @@ VALUE = 'value'
 OLD_VALUE = 'old_value'
 
 
-def create_diff():
-    """Дифф это список."""
-    return []
-
-
-def add_delete(key, data, diff):
-    """Добавление удаленного элемента."""
-    new_data = deepcopy(data)
-    diff.append(
-        {
-            STATE: STATE_REMOVE,
-            KEY: key,
-            CHILDREN: None,
-            VALUE: new_data,
-        },
-    )
-
-
-def add_unmodified(key, data, diff):
-    """Добавление неизмененного элемента."""
-    new_data = deepcopy(data)
-    diff.append(
-        {
-            STATE: STATE_UNMODIFIED,
-            KEY: key,
-            CHILDREN: None,
-            VALUE: new_data,
-        },
-    )
-
-
-def add_update(key, data1, data2, diff):
-    """Добавление измененного элемента."""
-    new_data1 = deepcopy(data1)
-    new_data2 = deepcopy(data2)
-    diff.append(
-        {
-            STATE: STATE_UPDATE,
-            KEY: key,
-            OLD_VALUE: new_data1,
-            CHILDREN: None,
-            VALUE: new_data2,
-        },
-    )
-
-
-def add_add(key, data, diff):
-    """Добавление добавленного элемента."""
-    new_data = deepcopy(data)
-    diff.append(
-        {
-            STATE: STATE_ADD,
-            KEY: key,
-            CHILDREN: None,
-            VALUE: new_data,
-        },
-    )
-
-
-def add_diff(key, diff1, diff2):
-    """Добавление вложенного дифа."""
-    diff1.extend([
-        {
-            STATE: STATE_NESTED,
-            KEY: key,
-            CHILDREN: diff2,
-            VALUE: None,
-        },
-    ])
-
-
-def compare_data(data1, data2):  # noqa: WPS231
+def compare_data(data1, data2):  # noqa: WPS210, WPS231
     """Сравнение двух данных и формирование дифа."""
-    diff = create_diff()
+    diff = []
     keys = sorted(data1.keys() | data2.keys())
     for key in keys:
+        value1 = data1.get(key)
+        value2 = data2.get(key)
         type_data = (
-            isinstance(data1.get(key), dict) and  # noqa: W504
-            isinstance(data2.get(key), dict)
+            isinstance(value1, dict) and isinstance(value2, dict)
         )
         if key in data1 and key not in data2:
-            add_delete(key, data1[key], diff)
+            diff.append(
+                {
+                    STATE: STATE_REMOVE,
+                    KEY: key,
+                    CHILDREN: None,
+                    VALUE: deepcopy(value1),
+                },
+            )
         elif key not in data1 and key in data2:
-            add_add(key, data2[key], diff)  # noqa: WPS204
-        elif data1[key] == data2[key]:
-            add_unmodified(key, data2[key], diff)
+            diff.append(
+                {
+                    STATE: STATE_ADD,
+                    KEY: key,
+                    CHILDREN: None,
+                    VALUE: deepcopy(value2),
+                },
+            )
+        elif value1 == data2[key]:
+            diff.append(
+                {
+                    STATE: STATE_UNMODIFIED,
+                    KEY: key,
+                    CHILDREN: None,
+                    VALUE: deepcopy(value2),
+                },
+            )
+
         elif type_data:
-            add_diff(key, diff, compare_data(data1[key], data2[key]))
+            diff.extend([
+                {
+                    STATE: STATE_NESTED,
+                    KEY: key,
+                    CHILDREN: compare_data(value1, value2),
+                    VALUE: None,
+                },
+            ])
         else:
-            add_update(key, data1[key], data2[key], diff)
+            diff.append(
+                {
+                    STATE: STATE_UPDATE,
+                    KEY: key,
+                    OLD_VALUE: deepcopy(value1),
+                    CHILDREN: None,
+                    VALUE: deepcopy(value2),
+                },
+            )
 
     return diff

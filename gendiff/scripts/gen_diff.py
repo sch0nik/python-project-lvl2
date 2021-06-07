@@ -4,8 +4,8 @@
 
 Программа определяющая разницу между двумя структурами данных.
 """
-from gendiff.generate_difference import generate_diff
 from gendiff.cli import pars_args
+from gendiff.generate_difference import generate_diff
 
 
 def main():

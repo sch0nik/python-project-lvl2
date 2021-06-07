@@ -5,15 +5,7 @@ BASE_TAB = 4
 
 
 def value_formatting(value, tab):
-    """Приведение value к нужной форме.
-
-    Args:
-        value: значение, которое нужно привести к заданной форме.
-        tab: количество отступов перед строкой.
-
-    Returns:
-        Форматированная строка.
-    """
+    """Приведение value к нужной форме."""
     space = ' '
     if value is True or value is False:
         return str(value).lower()
