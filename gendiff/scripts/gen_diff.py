@@ -5,21 +5,21 @@
 Программа определяющая разницу между двумя структурами данных.
 """
 from gendiff.generate_difference import generate_diff
-from gendiff.parser import create_pars
+from gendiff.cli import pars_args
 
 
 def main():
     """Главная функция.
 
-    Обработка параметров команднойй строки.
+    Обработка параметров командной строки.
     И вывод результата.
     """
-    pars = create_pars()
+    args = pars_args()
     print(
         generate_diff(
-            pars.first_file,
-            pars.second_file,
-            pars.format,
+            args.first_file,
+            args.second_file,
+            args.format,
         ),
     )
 

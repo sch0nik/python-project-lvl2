@@ -26,13 +26,13 @@ def format_plain(data, parents=''):  # noqa: WPS210
     """Форматирование вывода в виде plain."""
     # Словарь строковых констант.
     dict_diff = {
-        diff.STATE_ADD: "Property \'{0}\' was added with value: {1}\n",
-        diff.STATE_UPDATE: "Property \'{0}\' was updated. From {2} to {1}\n",
-        diff.STATE_REMOVE: "Property \'{0}\' was removed\n",
+        diff.STATE_ADD: "Property \'{0}\' was added with value: {1}",
+        diff.STATE_UPDATE: "Property \'{0}\' was updated. From {2} to {1}",
+        diff.STATE_REMOVE: "Property \'{0}\' was removed",
         diff.STATE_UNMODIFIED: '',
     }
 
-    format_str = ''
+    format_str = []
     for item in data:
 
         name = diff.get_name(item)
@@ -46,8 +46,8 @@ def format_plain(data, parents=''):  # noqa: WPS210
             old_value = value_formatting(diff.get_old_value(item))
             tmp = dict_diff[current_state].format(name, value, old_value)
 
-        format_str += tmp
+        format_str.append(tmp)
 
-    if not parents:
-        format_str = format_str[:-1]
+    format_str = [item for item in format_str if item]
+    format_str = '\n'.join(format_str)
     return format_str

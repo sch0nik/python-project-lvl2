@@ -2,7 +2,7 @@
 import argparse
 
 
-def create_pars():
+def pars_args():
     """Создание парсера параметров.
 
     Returns:

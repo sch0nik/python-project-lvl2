@@ -33,7 +33,7 @@ def value_formatting(value, tab):
     return str(value)
 
 
-def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
+def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210
     """Функция форматирования дифа для вывода в видде stylish.
 
     Args:
@@ -43,7 +43,7 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
     Returns:
         Форматированная строка в виде stylish.
     """
-    result = ''
+    result = []
     space = ' '
 
     # Строковые константы для вывода.
@@ -80,6 +80,7 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
                 indent,
             )
 
-        result += tmp
+        result.append(tmp)
 
-    return f'{{\n{result}{space[:-4]}}}'
+    result = ''.join(result)
+    return f'{{\n{result}{space[:-BASE_TAB]}}}'

@@ -1,73 +1,70 @@
 from os.path import join
 from gendiff.generate_difference import generate_diff
 
+PATH_TESTS = ['tests', 'fixtures']
+
+FILE1_JSON = 'file1.json'
+FILE2_JSON = 'file2.json'
+
+FILE1_YAML = 'file1.yaml'
+FILE2_YAML = 'file2.yaml'
+
+RESULT_PLAIN = 'result_plain'
+RESULT_STYLISH = 'result_stylish'
+RESULT_JSON = 'result_json.json'
+
+STYLISH = 'stylish'
+PLAIN = 'plain'
+JSON = 'json'
+
 
 def paths(case):
-    dict_case = {
-        'tests': 'tests',
-        'fixtures': 'fixtures',
-
-        'file1.json': 'file1.json',
-        'file2.json': 'file2.json',
-
-        'file1.yaml': 'file1.yaml',
-        'file2.yaml': 'file2.yaml',
-
-        'result_plain': 'result_plain',
-        'result_stylish': 'result_stylish',
-        'result_json.json': 'result_json.json',
-    }
     return join(
-        dict_case['tests'],
-        dict_case['fixtures'],
-        dict_case[case],
+        PATH_TESTS[0],
+        PATH_TESTS[1],
+        case,
     )
 
 
-def test_generate_diff_plain():
-    result_file = open(paths('result_plain'))
-    expected_result = result_file.read()
+def result_file_read(result_file):
+    file = open(paths(result_file))
+    expected_result = file.read()
+    file.close()
     expected_result.strip()
-    result_file.close()
+    return expected_result
 
-    file_a = paths('file1.json')
-    file_b = paths('file2.json')
-    received_result_json = generate_diff(file_a, file_b, 'plain')
 
-    file_a = paths('file1.yaml')
-    file_b = paths('file2.yaml')
-    received_result_yaml = generate_diff(file_a, file_b, 'plain')
+def received_result(file1, file2, formatt):
+    file1 = paths(file1)
+    file2 = paths(file2)
+    return generate_diff(file1, file2, formatt)
+
+
+def test_generate_diff_plain():
+    expected_result = result_file_read(RESULT_PLAIN)
+
+    received_result_json = received_result(FILE1_JSON, FILE2_JSON, PLAIN)
+    received_result_yaml = received_result(FILE1_YAML, FILE2_YAML, PLAIN)
 
     assert received_result_yaml == expected_result
     assert received_result_json == expected_result
 
 
 def test_generate_diff_stylish():
-    result_file = open(paths('result_stylish'))
-    expected_result = result_file.read()
-    expected_result.strip()
-    result_file.close()
+    expected_result = result_file_read(RESULT_STYLISH)
 
-    file_a = paths('file1.json')
-    file_b = paths('file2.json')
-    received_result_json = generate_diff(file_a, file_b, 'stylish')
-
-    file_a = paths('file1.yaml')
-    file_b = paths('file2.yaml')
-    received_result_yaml = generate_diff(file_a, file_b, 'stylish')
+    received_result_json = received_result(FILE1_JSON, FILE2_JSON, STYLISH)
+    received_result_yaml = received_result(FILE1_YAML, FILE2_YAML, STYLISH)
 
     assert received_result_json == expected_result
     assert received_result_yaml == expected_result
 
 
 def test_generate_diff_json():
-    result_file = open(paths('result_json.json'))
-    expected_result = result_file.read()
-    expected_result.strip()
-    result_file.close()
+    expected_result = result_file_read(RESULT_JSON)
 
-    file_a = paths('file1.json')
-    file_b = paths('file2.json')
-    received_result_json = generate_diff(file_a, file_b, 'json')
+    received_result_json = received_result(FILE1_JSON, FILE2_JSON, JSON)
+    received_result_yaml = received_result(FILE1_YAML, FILE2_YAML, JSON)
 
     assert received_result_json == expected_result
+    assert received_result_yaml == expected_result
