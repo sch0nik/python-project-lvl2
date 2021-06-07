@@ -41,7 +41,7 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
         tab: отступ.
 
     Returns:
-        Форматированная строка в виее styish.
+        Форматированная строка в виде styish.
     """
     result = ''
     space = ' '
@@ -61,7 +61,7 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210  # noqa: WPS210
         name = diff.get_name(item)
         current_state = diff.get_state(item)
 
-        if diff.is_node(item):
+        if current_state == diff.STATE_NESTED:
             node = diff.get_children(item)
             formatted_node = f'{format_stylish(node, BASE_TAB + tab)}'
             tmp = space + dict_diff[current_state].format(
