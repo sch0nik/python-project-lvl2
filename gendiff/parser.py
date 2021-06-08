@@ -6,7 +6,6 @@ import yaml
 
 def parse(ext, file1, file2):
     """Парсер файлов."""
-
     if ext == 'json':
         file1 = json.load(open(file1))
         file2 = json.load(open(file2))

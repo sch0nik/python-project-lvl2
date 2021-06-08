@@ -4,7 +4,7 @@ from gendiff.formatters.plain import format_plain
 from gendiff.formatters.stylish import format_stylish
 
 
-def format(diff, formatter):
+def formatting(diff, formatter):
     """Выбор формата вывода дифа."""
     if formatter == 'stylish':
         return format_stylish(diff)
