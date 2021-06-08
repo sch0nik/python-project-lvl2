@@ -4,7 +4,7 @@
 
 Программа определяющая разницу между двумя структурами данных.
 """
-from gendiff.cli import pars_args
+from gendiff.cli import parse_args
 from gendiff.generate_difference import generate_diff
 
 
@@ -14,7 +14,7 @@ def main():
     Обработка параметров командной строки.
     И вывод результата.
     """
-    args = pars_args()
+    args = parse_args()
     print(
         generate_diff(
             args.first_file,
