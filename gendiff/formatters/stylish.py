@@ -4,7 +4,7 @@ from gendiff.processing_diff import apy_diff as diff
 BASE_TAB = 4
 
 
-def value_formatting(value, tab):
+def format_value(value, tab):
     """Приведение value к нужной форме."""
     space = ' '
     if value is True or value is False:
@@ -19,7 +19,7 @@ def value_formatting(value, tab):
             result += indent
             result += (
                 f'{item}: '
-                f'{value_formatting(value[item], tab + BASE_TAB)}\n'
+                f'{format_value(value[item], tab + BASE_TAB)}\n'
             )
         return f'{{\n{result}{space * tab}}}'
     return str(value)
@@ -63,8 +63,8 @@ def format_stylish(data, tab=BASE_TAB):  # noqa: WPS210
                 space,
             )
         else:
-            value = value_formatting(diff.get_value(item), tab)
-            old_value = value_formatting(diff.get_old_value(item), tab)
+            value = format_value(diff.get_value(item), tab)
+            old_value = format_value(diff.get_old_value(item), tab)
             tmp = indent + dict_diff[current_state].format(
                 name,
                 value,

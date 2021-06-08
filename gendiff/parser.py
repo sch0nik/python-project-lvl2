@@ -4,14 +4,14 @@ import json
 import yaml
 
 
-def parse(ext, file1, file2):
+def parse(ext, file):
     """Парсер файлов."""
+    file = open(file)
     if ext == 'json':
-        file1 = json.load(open(file1))
-        file2 = json.load(open(file2))
-        return file1, file2
-    elif ext == 'yaml':  # noqa: WPS514
-        file1 = yaml.full_load(open(file1))
-        file2 = yaml.full_load(open(file2))
-        return file1, file2
-    return None, None
+        data = json.load(file)
+    elif ext == 'yaml':
+        data = yaml.full_load(file)
+    else:
+        return None
+    file.close()
+    return data

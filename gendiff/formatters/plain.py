@@ -2,7 +2,7 @@
 from gendiff.processing_diff import apy_diff as diff
 
 
-def value_formatting(value):
+def format_value(value):
     """Приведение value к нужной форме."""
     if value is True or value is False:
         return str(value).lower()
@@ -35,8 +35,8 @@ def format_plain(data, parents=''):  # noqa: WPS210
         if diff.is_node(item):
             tmp = format_plain(diff.get_children(item), name)
         else:
-            value = value_formatting(diff.get_value(item))
-            old_value = value_formatting(diff.get_old_value(item))
+            value = format_value(diff.get_value(item))
+            old_value = format_value(diff.get_old_value(item))
             tmp = dict_diff[current_state].format(name, value, old_value)
 
         format_str.append(tmp)
