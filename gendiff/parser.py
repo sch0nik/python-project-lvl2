@@ -9,7 +9,7 @@ def parse(ext, file):
     file = open(file)
     if ext == 'json':
         data = json.load(file)
-    elif ext == 'yaml' or ext == 'yml':
+    elif ext == 'yaml' or ext == 'yml':  # noqa: WPS514
         data = yaml.full_load(file)
     else:
         return None
