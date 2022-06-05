@@ -3,7 +3,7 @@ name = "hexlet-code"
 version = "0.5.2"
 description = ""
 authors = ["Николай Ануфриев <sch-nikolaj@yandex.ru>"]
-repository = "https://github.com/sch0nik/python-project-lvl1"
+repository = "https://github.com/sch0nik/python-project-lvl2"
 packages = [
   { include = "gendiff" },
 ]
